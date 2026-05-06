@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Religionslehre 12/2 – Klausurvorbereitung</title>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --border: #e0dbd0;
+    --border2: #ccc8bc;
+    --text: #1a1814;
+    --text2: #5a5650;
+    --text3: #9a958e;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0eb;
+    --accent2: #7f77dd;
+    --accent2-light: #eeedfe;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --amber: #9a6400;
+    --amber-light: #fef9e7;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  
+  /* LAYOUT */
+  .app { max-width: 780px; margin: 0 auto; padding: 0 1rem 4rem; }
+  
+  /* HEADER */
+  .header { padding: 2.5rem 0 1.5rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .header h1 { font-size: 26px; font-weight: normal; letter-spacing: -0.02em; color: var(--text); }
+  .header p { font-size: 14px; color: var(--text3); margin-top: 4px; font-family: 'Courier New', monospace; }
+  
+  /* NAV TABS */
+  .nav { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .nav-btn { padding: 7px 14px; border-radius: 99px; border: 1px solid var(--border); font-size: 13px; cursor: pointer; background: var(--surface); color: var(--text2); font-family: inherit; transition: all 0.15s; }
+  .nav-btn:hover { border-color: var(--border2); color: var(--text); }
+  .nav-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+  
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+  
+  /* CARD */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .card-label { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 6px; font-family: 'Courier New', monospace; }
+  .card-title { font-size: 18px; font-weight: normal; color: var(--text); margin-bottom: 10px; }
+  .card-def { font-size: 14px; color: var(--text2); line-height: 1.7; margin-bottom: 14px; padding: 10px 14px; background: var(--surface2); border-radius: var(--radius-sm); border-left: 3px solid var(--border2); font-style: italic; }
+  .card-def.green { border-left-color: var(--accent); background: var(--accent-light); }
+  .card-def.purple { border-left-color: var(--accent2); background: var(--accent2-light); }
+  .card-def.red { border-left-color: var(--red); background: var(--red-light); }
+  ul.bullets { list-style: none; padding: 0; }
+  ul.bullets li { font-size: 13.5px; color: var(--text2); line-height: 1.7; padding: 3px 0 3px 18px; position: relative; }
+  ul.bullets li::before { content: "→"; position: absolute; left: 0; color: var(--text3); font-size: 11px; top: 5px; }
+  ul.bullets li strong { color: var(--text); font-weight: bold; }
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
+  
+  /* PERSON HEADER */
+  .person-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; flex-shrink: 0; font-family: 'Courier New', monospace; }
+  .av-alt { background: #eeedfe; color: #3c3489; }
+  .av-neu { background: #e1f5ee; color: #0f6e56; }
+  .av-info { background: #e6f1fb; color: #185fa5; }
+  .person-name { font-size: 16px; color: var(--text); }
+  .person-dates { font-size: 12px; color: var(--text3); font-family: 'Courier New', monospace; }
+  
+  /* TAGS */
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 99px; font-size: 11px; font-family: 'Courier New', monospace; margin-right: 4px; margin-bottom: 6px; }
+  .tag-alt { background: #eeedfe; color: #3c3489; }
+  .tag-neu { background: #e1f5ee; color: #0f6e56; }
+  
+  /* COMPARE */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .compare-col { border-radius: var(--radius-sm); padding: 12px; border: 1px solid var(--border); }
+  .compare-col.alt { background: #f5f3ff; border-color: #cbc8f0; }
+  .compare-col.neu { background: #f0faf5; border-color: #9fd4bc; }
+  .compare-col h4 { font-size: 13px; margin-bottom: 8px; font-weight: bold; }
+  .compare-col.alt h4 { color: #3c3489; }
+  .compare-col.neu h4 { color: #0f6e56; }
+  
+  /* ===== QUIZ ===== */
+  #quiz-section { display: none; }
+  #quiz-section.active { display: block; }
+  
+  .quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: gap; }
+  .quiz-meta { font-size: 13px; color: var(--text3); font-family: 'Courier New', monospace; }
+  
+  .progress-bar-wrap { background: var(--border); border-radius: 99px; height: 5px; margin-bottom: 1.5rem; }
+  .progress-bar-fill { background: var(--accent); height: 5px; border-radius: 99px; transition: width 0.4s ease; }
+  
+  .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1rem; }
+  .quiz-category { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); font-family: 'Courier New', monospace; margin-bottom: 10px; }
+  .quiz-question { font-size: 19px; font-weight: normal; color: var(--text); line-height: 1.5; margin-bottom: 1.5rem; }
+  
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
+  .quiz-opt { padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); cursor: pointer; font-size: 14px; color: var(--text2); text-align: left; font-family: inherit; transition: all 0.15s; line-height: 1.5; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .quiz-opt.correct { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: bold; }
+  .quiz-opt.wrong { background: var(--red-light); border-color: var(--red); color: var(--red); }
+  .quiz-opt.reveal { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+  .quiz-opt:disabled { cursor: default; }
+  
+  .quiz-feedback { padding: 12px 16px; border-radius: var(--radius-sm); font-size: 14px; line-height: 1.6; margin-bottom: 1rem; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: var(--accent-light); color: var(--accent); border: 1px solid #a8cdb5; }
+  .quiz-feedback.wrong { background: var(--red-light); color: var(--red); border: 1px solid #e8b0ab; }
+  
+  .quiz-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { padding: 9px 20px; border-radius: 99px; border: 1px solid var(--border); font-size: 13px; cursor: pointer; background: var(--surface); color: var(--text); font-family: inherit; transition: all 0.15s; }
+  .btn:hover { background: var(--surface2); border-color: var(--border2); }
+  .btn.primary { background: var(--text); color: #fff; border-color: var(--text); }
+  .btn.primary:hover { background: #333; }
+  .btn.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.accent:hover { background: #245030; }
+  
+  /* RESULT SCREEN */
+  .result-screen { text-align: center; padding: 3rem 1rem; }
+  .result-score { font-size: 64px; font-weight: normal; color: var(--accent); letter-spacing: -0.03em; }
+  .result-label { font-size: 14px; color: var(--text3); font-family: 'Courier New', monospace; margin-bottom: 1.5rem; }
+  .result-message { font-size: 17px; color: var(--text2); margin-bottom: 2rem; line-height: 1.6; }
+  .result-breakdown { text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
+  .result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text2); }
+  .result-row:last-child { border-bottom: none; }
+  .result-row .val { font-family: 'Courier New', monospace; font-weight: bold; }
+  .val.g { color: var(--accent); }
+  .val.r { color: var(--red); }
+
+  /* QUIZ MODE SELECTOR */
+  .quiz-mode-select { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .mode-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; cursor: pointer; transition: all 0.15s; }
+  .mode-card:hover { border-color: var(--accent); background: var(--accent-light); }
+  .mode-card.selected { border-color: var(--accent); background: var(--accent-light); }
+  .mode-card h3 { font-size: 15px; font-weight: normal; color: var(--text); margin-bottom: 4px; }
+  .mode-card p { font-size: 12px; color: var(--text3); line-height: 1.5; }
+  .mode-icon { font-size: 22px; margin-bottom: 8px; }
+
+  @media (max-width: 500px) {
+    .compare-grid, .quiz-mode-select { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>Religionslehre 12/2</h1>
+    <p>Bayern G9 · Klausurvorbereitung</p>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showSection('religionsbegriff', this)">Religionsbegriff</button>
+    <button class="nav-btn" onclick="showSection('klassiker', this)">Klassische Kritiker</button>
+    <button class="nav-btn" onclick="showSection('modern', this)">Moderne Kritiker</button>
+    <button class="nav-btn" onclick="showSection('vergleich', this)">Alt vs. Neu</button>
+    <button class="nav-btn" onclick="showSection('gottesbeweise', this)">Pascal & Aquin</button>
+    <button class="nav-btn" onclick="showSection('glaube', this)">Glaube & Vernunft</button>
+    <button class="nav-btn" onclick="showSection('ersatz', this)">Ersatzreligion</button>
+    <button class="nav-btn" onclick="showSection('quiz-section', this)" style="background:#2d5a3d;color:#fff;border-color:#2d5a3d;">✦ Abprüfen</button>
+  </div>
+
+  <!-- LERNINHALT SECTIONS -->
+  <div id="religionsbegriff" class="section active">
+    <div class="card">
+      <div class="card-label">Definition</div>
+      <div class="card-title">Was ist Religion?</div>
+      <div class="card-def purple">Lat. <em>religio</em>: das ernsthafte Bemühen des Menschen um das Heilige, Transzendente oder eine höhere Wirklichkeit. Keine einheitliche Definition möglich – Annäherung über Merkmale.</div>
+      <ul class="bullets">
+        <li>Glaube an etwas Übernatürliches / Transzendentes (Gott, Götter, höheres Wesen)</li>
+        <li>Rituale, Gebete, Gemeinschaft, Symbole</li>
+        <li>Sinnstiftung und Antwort auf Grundfragen (Woher? Wohin? Warum?)</li>
+        <li>Unterscheidung: institutionalisierte Religion vs. persönliche Religiosität</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Wege religiöser Erfahrung</div>
+      <div class="card-title">Wie erfahren Menschen Religion?</div>
+      <ul class="bullets">
+        <li><strong>Natur:</strong> Ehrfurcht, Staunen, Überwältigung vor Naturphänomenen → Hinweis auf etwas Größeres</li>
+        <li><strong>Grenzerfahrungen:</strong> Krankheit, Tod, Liebe → Fragen nach Sinn entstehen</li>
+        <li><strong>Gemeinschaft / Ritual:</strong> Zugehörigkeit durch gemeinsame Praxis</li>
+        <li><strong>Transzendenz-Erfahrung:</strong> Gefühl des „Ganz-Anderen" (Rudolf Otto: das Numinose)</li>
+        <li><strong>Fußball als religiöse Erfahrung:</strong> Gemeinschaft, Ekstase, Identität → Übergang zu Ersatzreligion</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Der Mensch auf der Suche nach Gott</div>
+      <div class="card-title">Anthropologische Grundlage</div>
+      <div class="card-def green">Religion als Grundbedürfnis: Der Mensch stellt Sinnfragen und sucht nach Transzendenz – das gilt als anthropologisches Universale.</div>
+      <ul class="bullets">
+        <li>Augustinus: „Unruhig ist unser Herz, bis es Ruhe findet in Dir"</li>
+        <li>Pascal: Das „Vakuum" im Menschen, das nur Gott füllen kann (Gottförmige Leere)</li>
+        <li>Religionen entstehen überall und zu allen Zeiten (Religionswissenschaft)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="klassiker" class="section">
+    <div class="card">
+      <div class="person-header"><div class="avatar av-alt">LF</div><div><div class="person-name">Ludwig Feuerbach</div><div class="person-dates">1804–1872 · Projektionstheorie</div></div></div>
+      <div style="margin-bottom:8px"><span class="tag tag-alt">Atheist</span><span class="tag tag-alt">Anthropologiekritik</span></div>
+      <div class="card-def red">„Der Mensch erschafft Gott nach seinem Bild." Religion ist Projektion menschlicher Wünsche auf ein imaginäres Wesen.</div>
+      <ul class="bullets">
+        <li>Gott = idealisiertes Selbstbild des Menschen (Allmacht, Allwissenheit = was der Mensch sein möchte)</li>
+        <li>Religion entfremdet den Menschen von sich selbst: Er betet sein eigenes Wesen an</li>
+        <li>Theologie muss durch Anthropologie ersetzt werden</li>
+        <li>Schlüsselwerk: „Das Wesen des Christentums" (1841)</li>
+        <li>Ziel: Mensch soll sich selbst erkennen → Humanismus</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="person-header"><div class="avatar av-alt">KM</div><div><div class="person-name">Karl Marx</div><div class="person-dates">1818–1883 · Gesellschaftskritik</div></div></div>
+      <div style="margin-bottom:8px"><span class="tag tag-alt">Atheist</span><span class="tag tag-alt">Sozialkritik</span></div>
+      <div class="card-def red">„Religion ist das Opium des Volkes." Sie tröstet die Unterdrückten und lenkt von gesellschaftlichen Missständen ab.</div>
+      <ul class="bullets">
+        <li>Baut auf Feuerbach auf: Religion entsteht aus gesellschaftlichen Verhältnissen</li>
+        <li>Religion = ideologisches Instrument der Herrschenden zur Legitimation von Unterdrückung</li>
+        <li>Vertröstung auf das Jenseits hält von Revolution ab</li>
+        <li>Religion verschwindet, wenn soziale Missstände beseitigt sind</li>
+        <li>Volle Aussage: „Religion ist der Seufzer der bedrängten Kreatur … das Opium des Volkes"</li>
+        <li>Kritik: In kommunistischen Ländern wurde Religion nicht abgeschafft</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="person-header"><div class="avatar av-alt">FN</div><div><div class="person-name">Friedrich Nietzsche</div><div class="person-dates">1844–1900 · Moralkritik</div></div></div>
+      <div style="margin-bottom:8px"><span class="tag tag-alt">Atheist</span><span class="tag tag-alt">Moralkritik</span></div>
+      <div class="card-def red">„Gott ist tot! Und wir haben ihn getötet." Die Moderne hat Gott als Grundlage des Lebens verdrängt.</div>
+      <ul class="bullets">
+        <li>Gott ist nicht widerlegt – er ist irrelevant geworden (kultureller Tod Gottes)</li>
+        <li>Christliche Moral = „Sklavenmoral": Schwäche wird zur Tugend erhoben</li>
+        <li>Gegenbild: Der Übermensch schafft eigene Werte jenseits von Gut und Böse</li>
+        <li>Nihilismus-Gefahr: Ohne Gott droht Sinnlosigkeit → muss überwunden werden</li>
+        <li>Schlüsselwerke: „Also sprach Zarathustra", „Zur Genealogie der Moral"</li>
+        <li>Kritik: Wurde von Nationalsozialisten missbraucht (verfälscht)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="modern" class="section">
+    <div class="card">
+      <div class="person-header"><div class="avatar av-neu">RD</div><div><div class="person-name">Richard Dawkins</div><div class="person-dates">geb. 1941 · Naturwissenschaftler</div></div></div>
+      <div style="margin-bottom:8px"><span class="tag tag-neu">Neuer Atheist</span><span class="tag tag-neu">Naturwissenschaft</span></div>
+      <div class="card-def green">Religion ist ein „Gotteswahn" (The God Delusion, 2006) – eine gefährliche Illusion ohne wissenschaftliche Grundlage.</div>
+      <ul class="bullets">
+        <li>Evolutionsbiologie erklärt Religion: Nebenprodukt nützlicher Gehirnfunktionen (Meme-Theorie)</li>
+        <li>Glaube = Virus des Geistes, der sich selbst reproduziert und schadet</li>
+        <li>Religionsunterricht für Kinder = geistige Kindesmisshandlung (provokante These)</li>
+        <li>Naturwissenschaft kann alle beantwortbaren Fragen beantworten</li>
+        <li>Im Unterschied zu Klassikern: aggressiv polemisch, will Religion aktiv abschaffen</li>
+        <li>Kritik: Naturwissenschaft kann keine Sinnfragen beantworten; Kategorienfehler</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Die Vier Reiter des neuen Atheismus</div>
+      <div class="card-title">Harris, Hitchens, Dennett + Dawkins</div>
+      <div class="card-def green">Alle vier vertreten einen kämpferischen Atheismus und wollen Religion aktiv überwinden.</div>
+      <ul class="bullets">
+        <li><strong>Sam Harris:</strong> Religion fördert irrationalen Glauben und gefährdet Demokratie; Spiritualität ohne Gott möglich</li>
+        <li><strong>Christopher Hitchens:</strong> „God is Not Great" – Religion vergiftet alles; historische Verbrechen der Kirche</li>
+        <li><strong>Daniel Dennett:</strong> Religion als natürliches Phänomen, das wissenschaftlich untersucht werden kann</li>
+        <li>Gemeinsam: Rationalismus, Empirismus, Ablehnung jeder Übernatürlichkeit</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="vergleich" class="section">
+    <div class="card">
+      <div class="card-label">Wichtigster Vergleich für die Klausur</div>
+      <div class="card-title">Klassische vs. Moderne Religionskritik</div>
+      <div class="compare-grid">
+        <div class="compare-col alt">
+          <h4>Klassiker (19. Jh.)</h4>
+          <ul class="bullets">
+            <li>Feuerbach, Marx, Nietzsche</li>
+            <li>Philosophisch-gesellschaftliche Kritik</li>
+            <li>Religion als Produkt von Psyche oder sozialen Verhältnissen</li>
+            <li>Ernsthafte Auseinandersetzung mit religiösen Inhalten</li>
+            <li>Ziel: Befreiung des Menschen</li>
+            <li>Differenziert und dialektisch</li>
+          </ul>
+        </div>
+        <div class="compare-col neu">
+          <h4>Neue Atheisten (21. Jh.)</h4>
+          <ul class="bullets">
+            <li>Dawkins, Harris, Hitchens, Dennett</li>
+            <li>Naturwissenschaftliche Kritik</li>
+            <li>Religion als empirisch widerlegte Illusion</li>
+            <li>Oft polemisch, wenig theologisches Wissen</li>
+            <li>Ziel: aktive Abschaffung von Religion</li>
+            <li>Missionarischer Eifer (Atheismus als Kampfansage)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="card-label">Gemeinsamkeiten</div>
+      <ul class="bullets">
+        <li>Beide lehnen übernatürliche Erklärungen ab</li>
+        <li>Beide sehen Religion als menschliches Konstrukt</li>
+        <li>Beide argumentieren für eine diesseitige, rationale Weltanschauung</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="card-label">Entscheidender Unterschied</div>
+      <ul class="bullets">
+        <li>Klassiker: <em>Warum</em> entsteht Religion? → Analyse der Ursachen (Psyche, Gesellschaft, Moral)</li>
+        <li>Neue Atheisten: Religion ist <em>falsch und gefährlich</em> → direkter Angriff</li>
+        <li>Klassiker respektieren Religion als Phänomen; neue Atheisten meist nicht</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Auf einen Blick</div>
+      <div class="card-title">Die vier Hauptvertreter verglichen</div>
+      <ul class="bullets">
+        <li><strong>Feuerbach:</strong> Religion = Projektion (Mensch erschafft Gott)</li>
+        <li><strong>Marx:</strong> Religion = Opium (gesellschaftliche Funktion)</li>
+        <li><strong>Nietzsche:</strong> Gott ist tot = Kulturdiagnose (Wertezerfall)</li>
+        <li><strong>Dawkins:</strong> Religion = Gotteswahn (naturwissenschaftlich widerlegt)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="gottesbeweise" class="section">
+    <div class="card">
+      <div class="card-label">Blaise Pascal (1623–1662)</div>
+      <div class="card-title">Die Wette Pascals</div>
+      <div class="card-def purple">Pascal argumentiert nicht durch Vernunft, sondern pragmatisch: Es ist rational vernünftig, an Gott zu glauben – wegen der möglichen Konsequenzen.</div>
+      <ul class="bullets">
+        <li><strong>Die Wette:</strong> Gott existiert + ich glaube → ewiges Heil. Gott existiert nicht + ich glaube → nichts verloren.</li>
+        <li>Gott existiert + ich glaube nicht → ewige Verdammnis. Also: Glauben ist die rationale Wahl!</li>
+        <li>„Gottförmige Leere": Im Menschen gibt es eine Lücke, die nur Gott füllen kann</li>
+        <li>Pascal: tiefreligiöser Mensch und brillanter Wissenschaftler zugleich</li>
+        <li>Kritik: Welcher Gott? Kann man Glauben erzwingen? Instrumentalisierung des Glaubens</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Thomas von Aquin (1225–1274)</div>
+      <div class="card-title">Die Quinque Viae – Fünf Wege zu Gott</div>
+      <div class="card-def purple">Aquin leitet die Existenz Gottes aus der Beobachtung der Welt ab (kosmologische Argumentation).</div>
+      <ul class="bullets">
+        <li><strong>1. Weg – Bewegung:</strong> Alles Bewegte wird bewegt → es muss einen ersten unbewegten Beweger geben = Gott</li>
+        <li><strong>2. Weg – Wirkursache:</strong> Jede Wirkung hat eine Ursache → es muss eine erste Ursache geben = Gott</li>
+        <li><strong>3. Weg – Kontingenz:</strong> Alles könnte auch nicht sein → es muss ein notwendiges Wesen geben = Gott</li>
+        <li><strong>4. Weg – Stufung des Seins:</strong> Es gibt Grade von Vollkommenheit → höchste Vollkommenheit = Gott</li>
+        <li><strong>5. Weg – Teleologie:</strong> Alles strebt einem Ziel zu → es muss einen lenkenden Geist geben = Gott</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="card-label">Kritik an Aquin</div>
+      <ul class="bullets">
+        <li>Warum muss der „erste Beweger" Gott sein?</li>
+        <li>Naturwissenschaft (Evolution, Urknall) erklärt Ordnung ohne Gott</li>
+        <li>Schlussfolgerung von Welt auf Gott ist logisch nicht zwingend</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="glaube" class="section">
+    <div class="card">
+      <div class="card-label">Grundfrage</div>
+      <div class="card-title">Verhältnis von Vernunft und Glaube</div>
+      <div class="card-def purple">Können Vernunft und Glaube nebeneinander bestehen? Drei Grundpositionen:</div>
+      <ul class="bullets">
+        <li><strong>Gegensatz (Konfliktmodell):</strong> Glaube und Vernunft widersprechen sich; nur eines kann wahr sein → Atheisten, manche Fundamentalisten</li>
+        <li><strong>Unabhängigkeit (Zwei-Stockwerk-Modell):</strong> Beschäftigen sich mit verschiedenen Fragen → kein Konflikt nötig</li>
+        <li><strong>Ergänzung (Komplementarität):</strong> Vernunft führt bis zu einer Grenze, Glaube geht darüber hinaus</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Wichtige Positionen</div>
+      <div class="card-title">Denker zu Glaube und Vernunft</div>
+      <ul class="bullets">
+        <li><strong>Aquin:</strong> Vernunft und Glaube ergänzen sich – Vernunft kann Gottes Existenz beweisen, Glaube offenbart darüber hinaus</li>
+        <li><strong>Pascal:</strong> Das Herz hat Gründe, die die Vernunft nicht kennt – Glaube ist eigener Erkenntnisweg</li>
+        <li><strong>Dawkins:</strong> Nur Vernunft / Wissenschaft; Glaube ist Irrationalismus</li>
+        <li><strong>Kirchliche Lehre:</strong> Fides et Ratio (Johannes Paul II.) – Glaube und Vernunft sind keine Gegensätze</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Glaube und Naturwissenschaft</div>
+      <div class="card-title">Können beide wahr sein?</div>
+      <ul class="bullets">
+        <li>Naturwissenschaft: beschreibt das <em>Wie</em> der Welt (Methoden, Fakten, Gesetze)</li>
+        <li>Religion: beantwortet das <em>Warum</em> und <em>Wozu</em> (Sinn, Wert, Ziel)</li>
+        <li>Viele Naturwissenschaftler sind gläubig (z.B. Georges Lemaître – Urknall-Begründer, war Priester)</li>
+        <li>Konflikt entsteht meist, wenn eine Seite in den Bereich der anderen eingreift</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="ersatz" class="section">
+    <div class="card">
+      <div class="card-label">Ersatzreligion / Säkularreligion</div>
+      <div class="card-title">Fußball als Ersatzreligion</div>
+      <div class="card-def green">Moderne Menschen suchen religiöse Erfahrungen in säkularen Phänomenen – Fußball zeigt religiöse Strukturen besonders deutlich.</div>
+      <ul class="bullets">
+        <li><strong>Gemeinschaft:</strong> Fangemeinschaft als Glaubensgemeinschaft</li>
+        <li><strong>Ritual:</strong> Spieltag, Anstehordnungen, Gesänge, Schweigeminuten</li>
+        <li><strong>Heilige Orte:</strong> Stadion als Tempel, der Rasen als heiliger Boden</li>
+        <li><strong>Helden / Idole:</strong> Spieler als Heilige oder Erlöserfiguren (Messi als „Dios")</li>
+        <li><strong>Ekstase:</strong> kollektives Hochgefühl bei Toren (vergleichbar mit religiöser Erfahrung)</li>
+        <li><strong>Jenseits-Ersatz:</strong> Vereinsgeschichte, Mythos, ewiger Ruhm</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="card-label">Theologische Bewertung & Bezüge</div>
+      <ul class="bullets">
+        <li>Zeigt: Der Mensch braucht religiöse Erfahrung → Argument für anthropologische Religionsbedürftigkeit</li>
+        <li>Aber: Ersatzreligion bleibt im Diesseits, gibt keine Antwort auf Todesfragen</li>
+        <li>Bezug zu Nietzsche: Nach dem Tod Gottes entstehen Ersatzgötter</li>
+        <li>Bezug zu Pascal: Die Leere wird mit Fußball gefüllt, statt mit Gott</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div id="quiz-section" class="section">
+    <div id="quiz-start">
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-label">Modus wählen</div>
+        <div class="card-title" style="margin-bottom:1rem;">Wie möchtest du abgefragt werden?</div>
+        <div class="quiz-mode-select">
+          <div class="mode-card selected" id="mode-mc" onclick="selectMode('mc')">
+            <div class="mode-icon">◉</div>
+            <h3>Multiple Choice</h3>
+            <p>4 Antwortmöglichkeiten, eine ist richtig. Schnelles Durchgehen.</p>
+          </div>
+          <div class="mode-card" id="mode-all" onclick="selectMode('all')">
+            <div class="mode-icon">⊞</div>
+            <h3>Alle Fragen</h3>
+            <p>Alle Fragen in zufälliger Reihenfolge – komplett durch.</p>
+          </div>
+        </div>
+        <button class="btn accent" onclick="startQuiz()" style="width:100%;margin-top:0.5rem;">Quiz starten →</button>
+      </div>
+    </div>
+
+    <div id="quiz-active" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <span class="quiz-meta" id="q-counter">Frage 1 / 20</span>
+        <span class="quiz-meta" id="q-score">✓ 0 &nbsp; ✗ 0</span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="q-progress" style="width:0%"></div></div>
+      <div class="quiz-card">
+        <div class="quiz-category" id="q-category"></div>
+        <div class="quiz-question" id="q-question"></div>
+        <div class="quiz-options" id="q-options"></div>
+        <div class="quiz-feedback" id="q-feedback"></div>
+        <div class="quiz-controls">
+          <button class="btn primary" id="q-next" onclick="nextQuestion()" style="display:none;">Nächste Frage →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="quiz-result" style="display:none;">
+      <div class="result-screen">
+        <div class="result-score" id="res-score"></div>
+        <div class="result-label" id="res-label"></div>
+        <div class="result-message" id="res-message"></div>
+        <div class="result-breakdown">
+          <div class="result-row"><span>Richtige Antworten</span><span class="val g" id="res-correct"></span></div>
+          <div class="result-row"><span>Falsche Antworten</span><span class="val r" id="res-wrong"></span></div>
+          <div class="result-row"><span>Gesamt</span><span class="val" id="res-total"></span></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn primary" onclick="startQuiz()">Nochmal versuchen</button>
+          <button class="btn" onclick="showSection('klassiker', null)">Zum Lerninhalt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  // RELIGIONSBEGRIFF
+  { cat: "Religionsbegriff", q: "Was bedeutet das lateinische Wort 'religio'?", correct: "Das ernsthafte Bemühen des Menschen um das Heilige und Transzendente", wrong: ["Die Ablehnung von Übernatürlichem", "Die Gemeinschaft von Gläubigen in einer Kirche", "Die wissenschaftliche Erforschung des Glaubens"], explanation: "Religio bezeichnet das ernsthafte Bemühen des Menschen um das Heilige, Transzendente oder eine höhere Wirklichkeit. Es gibt keine einheitliche Definition – man nähert sich über Merkmale an." },
+  { cat: "Religionsbegriff", q: "Was versteht Rudolf Otto unter dem 'Numinosen'?", correct: "Das Gefühl des 'Ganz-Anderen' – eine Begegnung mit dem Heiligen, die Schauer und Faszination auslöst", wrong: ["Die Verneinung der Existenz Gottes", "Die rationalen Beweise für Gottes Existenz", "Das Erleben von Fußball als Gemeinschaftserlebnis"], explanation: "Rudolf Otto beschreibt mit dem 'Numinosen' die irrationale Erfahrung des Heiligen – ein Schauer (mysterium tremendum) und eine Faszination (fascinans) vor dem 'Ganz-Anderen'." },
+  { cat: "Religionsbegriff", q: "Augustinus beschreibt den Menschen als grundlegend auf der Suche nach Gott. Welches Zitat wird ihm zugeschrieben?", correct: "„Unruhig ist unser Herz, bis es Ruhe findet in Dir"", wrong: ["„Der Mensch ist dem Menschen ein Wolf"", "„Ich denke, also bin ich"", "„Gott ist tot, und wir haben ihn getötet""], explanation: "Augustinus drückt damit aus, dass der Mensch von Natur aus nach Gott strebt – eine religiöse Anthropologie, die Pascal später mit seiner 'gottförmigen Leere' aufgreift." },
+  { cat: "Religionsbegriff", q: "Welche Aussage beschreibt religiöse Erfahrung über die Natur am besten?", correct: "Das Erleben von Ehrfurcht und Staunen vor der Natur kann als Hinweis auf eine höhere Wirklichkeit gedeutet werden", wrong: ["Die Natur beweist logisch die Nicht-Existenz Gottes", "Naturerfahrungen ersetzen vollständig den institutionalisierten Glauben", "Nur Grenzerfahrungen wie Tod und Krankheit sind religiös relevant"], explanation: "Naturerfahrungen (Sonnenuntergang, Sternenhimmel) können Ehrfurcht und Staunen auslösen – religiöse Erfahrungen, die auf etwas Größeres hindeuten können. Dies ist einer der klassischen 'Wege religiöser Erfahrung'." },
+
+  // FEUERBACH
+  { cat: "Religionskritik – Feuerbach", q: "Was ist das Kernargument von Feuerbachs Projektionstheorie?", correct: "Der Mensch erschafft Gott nach seinem eigenen idealisierten Bild – Gott ist eine Projektion menschlicher Wünsche", wrong: ["Religion ist ein Werkzeug der Herrschenden zur Unterdrückung", "Gott ist kulturell überflüssig geworden durch die Moderne", "Religion ist ein Virus, der sich im Gehirn reproduziert"], explanation: "Feuerbach sieht in Gott die idealisierte Projektion des Menschen: Allmacht, Allwissenheit und Allgüte sind Eigenschaften, die der Mensch sich selbst wünscht. Er betet also sein eigenes Wesen an." },
+  { cat: "Religionskritik – Feuerbach", q: "Welchen Begriff setzt Feuerbach an die Stelle der Theologie?", correct: "Anthropologie", wrong: ["Soziologie", "Psychologie", "Naturwissenschaft"], explanation: "Feuerbach fordert, dass Theologie (Rede von Gott) durch Anthropologie (Lehre vom Menschen) ersetzt wird, da Gott letztlich nur eine Aussage über den Menschen sei." },
+  { cat: "Religionskritik – Feuerbach", q: "Inwiefern führt Religion nach Feuerbach zur 'Entfremdung' des Menschen?", correct: "Der Mensch überträgt sein eigenes Wesen auf Gott und entfremdet sich so von sich selbst", wrong: ["Religion zwingt den Menschen zur Arbeit und macht ihn unglücklich", "Religion lässt den Menschen an übernatürliche Kräfte glauben statt an die Vernunft", "Religion verhindert, dass der Mensch gesellschaftliche Revolutionen durchführt"], explanation: "Indem der Mensch die besten Eigenschaften seines eigenen Wesens auf Gott projiziert, verarmt er sich selbst. Er betet an, was er selbst sein könnte – das ist für Feuerbach eine Form der Selbstentfremdung." },
+
+  // MARX
+  { cat: "Religionskritik – Marx", q: "Was meint Marx mit dem Satz 'Religion ist das Opium des Volkes'?", correct: "Religion tröstet die Unterdrückten und lenkt sie von gesellschaftlichen Missständen ab", wrong: ["Religion macht Menschen süchtig nach Ritualen und Gebet", "Religion ist eine medizinische Praxis der alten Gesellschaft", "Religion ist ein Mittel zur persönlichen Entspannung"], explanation: "Marx sieht Religion als Betäubungsmittel (Opium): Sie lindert den Schmerz der Unterdrückten, ohne die Ursache zu beseitigen. Gleichzeitig hält sie die Unterdrückten davon ab, gegen ihr Schicksal aufzubegehren." },
+  { cat: "Religionskritik – Marx", q: "Auf wessen Religionskritik baut Marx auf?", correct: "Auf Feuerbachs Projektionstheorie", wrong: ["Auf Nietzsche Moralkritik", "Auf Darwins Evolutionstheorie", "Auf Kants Vernunftkritik"], explanation: "Marx übernimmt Feuerbachs Grundthese (Religion als menschliches Konstrukt) und ergänzt sie um die gesellschaftliche Dimension: Religion entsteht aus konkreten sozialen Verhältnissen und dient der Herrschaftssicherung." },
+  { cat: "Religionskritik – Marx", q: "Welche Prognose stellte Marx bezüglich der Religion auf?", correct: "Religion werde verschwinden, sobald die gesellschaftlichen Missstände, aus denen sie entsteht, beseitigt sind", wrong: ["Religion werde durch Naturwissenschaft vollständig ersetzt", "Religion werde sich zur einzigen gesellschaftlichen Kraft entwickeln", "Religion werde von der Kirche selbst abgeschafft werden"], explanation: "Marx glaubte, dass Religion nur eine Funktion schlechter gesellschaftlicher Verhältnisse ist. Werden diese überwunden (durch Revolution und Kommunismus), verschwindet auch die Religion. Die Geschichte hat diese These allerdings widerlegt." },
+
+  // NIETZSCHE
+  { cat: "Religionskritik – Nietzsche", q: "Was bedeutet Nietzsche mit 'Gott ist tot'?", correct: "Gott ist kulturell bedeutungslos geworden – die Moderne hat ihn als Grundlage des Lebens verdrängt", wrong: ["Gott hat sich selbst aufgegeben und existiert nicht mehr", "Die Kirche hat Gott durch falsche Lehre zerstört", "Der Atheismus hat Gott durch logische Widerlegung besiegt"], explanation: "Nietzsche meint keinen physischen Tod. Er diagnostiziert den kulturellen Tod Gottes: In der modernen Welt hat Gott seine Funktion als Sinnstifter verloren. Das ist eine Diagnose, keine Freude – Nietzsche warnt vor den nihilistischen Folgen." },
+  { cat: "Religionskritik – Nietzsche", q: "Was versteht Nietzsche unter 'Sklavenmoral'?", correct: "Eine Moral, die Schwäche als Tugend darstellt und Ressentiment aus Ohnmacht heraus entwickelt", wrong: ["Eine Moral, die nur für die Unterschicht gilt", "Die christliche Forderung nach Gehorsam gegenüber dem Staat", "Die Ablehnung jeglicher Moralvorstellungen"], explanation: "Nietzsche kritisiert, dass das Christentum Eigenschaften der Schwachen (Demut, Gehorsam, Leiden) zu Tugenden erklärt. Das sei eine Reaktion der Ohnmächtigen auf die Starken – 'Sklavenmoral' als Ressentiment." },
+  { cat: "Religionskritik – Nietzsche", q: "Was ist Nietzsche Gegenbild zur christlichen Sklavenmoral?", correct: "Der Übermensch, der jenseits von Gut und Böse eigene Werte schafft", wrong: ["Der gläubige Mensch, der demütig lebt", "Der Wissenschaftler, der alle Wahrheit durch Vernunft erkennt", "Die klassenlose Gesellschaft ohne Unterdrückung"], explanation: "Der Übermensch ist Nietzsche Ideal: ein Mensch, der nach dem Tod Gottes selbst Werte schafft, anstatt sie passiv zu übernehmen. Er überwindet den Nihilismus durch schöpferische Selbstermächtigung." },
+
+  // DAWKINS / NEUE ATHEISTEN
+  { cat: "Moderne Religionskritik – Dawkins", q: "Was ist der Kerngedanke von Dawkins' Werk 'The God Delusion' (Gotteswahn)?", correct: "Religion ist eine gefährliche Illusion ohne wissenschaftliche Grundlage, die aktiv überwunden werden sollte", wrong: ["Religion ist ein natürliches Phänomen, das wissenschaftlich untersucht werden kann", "Gott ist tot und die Menschheit muss neue Werte finden", "Religion entsteht aus gesellschaftlicher Unterdrückung"], explanation: "Dawkins argumentiert, dass der Gottesgedanke empirisch falsch und die Religion als Institution schädlich ist. Er plädiert aktiv für Atheismus und hält Religionsunterricht für Kinder für eine Form geistiger Kindesmisshandlung." },
+  { cat: "Moderne Religionskritik – Dawkins", q: "Was meint Dawkins mit dem Begriff 'Mem' in Bezug auf Religion?", correct: "Religion ist ein kultureller Baustein (Mem), der sich wie ein Virus selbst reproduziert und im Gehirn weitergegeben wird", wrong: ["Ein logisches Argument, das die Existenz Gottes beweist", "Eine Erinnerung an religiöse Erfahrungen aus der Kindheit", "Ein wissenschaftliches Konzept aus der Quantenphysik"], explanation: "Dawkins überträgt das Konzept der Gene auf Kultur: Meme sind kulturelle Replikationseinheiten. Religion ist für ihn ein Mem-Komplex, der sich durch Weitergabe von Generation zu Generation verbreitet – ähnlich wie ein Virus." },
+  { cat: "Moderne Religionskritik – Dawkins", q: "Welcher entscheidende Unterschied besteht zwischen Dawkins und Marx in ihrer Religionskritik?", correct: "Marx analysiert warum Religion entsteht (gesellschaftliche Funktion); Dawkins greift Religion direkt als falsch und gefährlich an", wrong: ["Marx ist Atheist, Dawkins hingegen agnostisch", "Dawkins verteidigt Religion als kulturelles Phänomen, Marx nicht", "Marx stützt sich auf Naturwissenschaft, Dawkins auf Philosophie"], explanation: "Das ist der zentrale Unterschied zwischen alten und neuen Religionskritikern: Die Klassiker (Feuerbach, Marx, Nietzsche) fragen nach den Ursachen von Religion. Neue Atheisten wie Dawkins lehnen Religion direkt als falsch und schädlich ab." },
+
+  // VERGLEICH
+  { cat: "Vergleich Alt vs. Neu", q: "Welche Aussage beschreibt den wichtigsten Unterschied zwischen klassischer und moderner Religionskritik?", correct: "Klassiker analysieren Ursprung und Funktion von Religion; Neue Atheisten wollen Religion aktiv als falsch und gefährlich bekämpfen", wrong: ["Klassiker sind Atheisten, Neue Atheisten hingegen Agnostiker", "Klassiker nutzen Naturwissenschaft, Neue Atheisten nutzen Philosophie", "Klassiker sind moderner als die Neuen Atheisten"], explanation: "Der Kernunterschied: Feuerbach, Marx, Nietzsche fragen 'Warum gibt es Religion?' und liefern gesellschaftliche/psychologische Antworten. Dawkins & Co. sagen: 'Religion ist schlicht falsch' – ein direkter polemischer Angriff." },
+  { cat: "Vergleich Alt vs. Neu", q: "Was haben klassische und moderne Religionskritiker gemeinsam?", correct: "Beide sehen Religion als menschliches Konstrukt und lehnen übernatürliche Erklärungen ab", wrong: ["Beide wollen Religion aktiv abschaffen", "Beide stützen sich auf die Evolutionsbiologie", "Beide entstammen dem 19. Jahrhundert"], explanation: "Trotz ihrer Unterschiede teilen beide Strömungen den Grundgedanken: Religion ist kein Ausdruck einer übernatürlichen Wirklichkeit, sondern ein menschliches Phänomen mit weltlichen Ursachen." },
+
+  // PASCAL & AQUIN
+  { cat: "Pascal & Aquin", q: "Was ist der Kerngedanke von Pascals Wette?", correct: "Es ist rational vernünftig, an Gott zu glauben, weil der mögliche Gewinn (ewiges Heil) den möglichen Verlust überwiegt", wrong: ["Der Glaube an Gott lässt sich durch Vernunft beweisen", "Die Existenz Gottes ergibt sich aus der Ordnung der Welt", "Der Mensch muss glauben, weil er ohne Gott unglücklich ist"], explanation: "Pascal argumentiert mit einer Kosten-Nutzen-Analyse: Glaubt man an Gott und er existiert → ewiges Heil. Glaubt man nicht und er existiert → ewige Verdammnis. Die vernünftige Wahl ist der Glaube." },
+  { cat: "Pascal & Aquin", q: "Was ist Pascals 'gottförmige Leere'?", correct: "Eine Lücke im menschlichen Herzen, die nur durch Gott gefüllt werden kann – nicht durch Reichtum, Ruhm oder Zerstreuung", wrong: ["Das Gefühl der Trostlosigkeit nach dem Tod Gottes (Nietzsche)", "Der leere Kirchensaal als Symbol des Bedeutungsverlusts von Religion", "Die Unfähigkeit des Menschen, Gott mit dem Verstand zu erfassen"], explanation: "Pascal glaubt, dass jeder Mensch eine tiefe innere Leere spürt. Alle weltlichen Versuche, sie zu füllen (Amüsement, Karriere, Besitz) scheitern. Nur Gott kann diese 'gottförmige Leere' wirklich ausfüllen." },
+  { cat: "Pascal & Aquin", q: "Welcher der fünf Wege des Thomas von Aquin argumentiert über die Zielgerichtetheit der Natur?", correct: "Der fünfte Weg (Teleologie): Alles in der Natur strebt einem Ziel zu, daher muss ein lenkender Geist existieren = Gott", wrong: ["Der erste Weg: Alles Bewegte wird von etwas anderem bewegt", "Der dritte Weg: Alles könnte auch nicht sein – es muss ein notwendiges Wesen geben", "Der vierte Weg: Es gibt Grade von Vollkommenheit – höchste Vollkommenheit ist Gott"], explanation: "Der fünfte Weg (Via quinta) beobachtet, dass Dinge ohne Vernunft dennoch auf Ziele hinwirken (z.B. Pflanzen zum Licht). Das setzt einen lenkenden Geist voraus – Gott als kosmischen Zweckgeber." },
+
+  // GLAUBE & VERNUNFT
+  { cat: "Glaube & Vernunft", q: "Welches Modell vertritt Thomas von Aquin zum Verhältnis von Glaube und Vernunft?", correct: "Ergänzungsmodell: Vernunft kann Gottes Existenz beweisen, Glaube offenbart darüber hinaus (Komplementarität)", wrong: ["Konfliktmodell: Glaube und Vernunft widersprechen sich grundsätzlich", "Unabhängigkeitsmodell: Glaube und Vernunft beschäftigen sich mit völlig getrennten Bereichen", "Identitätsmodell: Glaube und Vernunft sind dasselbe"], explanation: "Aquin sieht Vernunft und Glaube als komplementär: Die natürliche Vernunft kann zur Erkenntnis Gottes führen (Gottesbeweise), aber die übernatürlichen Glaubenswahrheiten (Trinität, Inkarnation) übersteigen sie." },
+  { cat: "Glaube & Vernunft", q: "Pascals Satz: „Das Herz hat Gründe, die die Vernunft nicht kennt." Was meint er damit?", correct: "Glaube ist ein eigenständiger Erkenntnisweg, der über die rationale Vernunft hinausgeht", wrong: ["Emotionen sind wichtiger als Vernunft in allen Lebensbereichen", "Der Glaube widerspricht der Vernunft und muss sie deshalb überwinden", "Religiöse Erfahrungen sind rein subjektiv und damit wissenschaftlich wertlos"], explanation: "Pascal meint: Es gibt Erkenntnisse, die durch das 'Herz' (Intuition, Glaube, Erfahrung) zugänglich sind, nicht durch logische Schlüsse. Glaube ist kein Irrationalismus, sondern ein anderer Erkenntnisweg." },
+
+  // ERSATZRELIGION
+  { cat: "Ersatzreligion – Fußball", q: "Welches Merkmal von Fußball macht ihn zur 'Ersatzreligion'?", correct: "Die Kombination aus Gemeinschaft, Ritualen, heiligen Orten, Idolen und kollektiver Ekstase entspricht religiösen Strukturen", wrong: ["Fußball wird weltweit gespielt und hat daher viele Anhänger", "Fußball ist kommerziell erfolgreicher als die meisten Religionen", "Fußball hat eine klare Moral und Regelwerk wie eine Religion"], explanation: "Fußball zeigt religiöse Strukturen: Das Stadion als Tempel, der Spieltag als Ritual, Spieler als Heilige, das Torjubeln als Ekstase, die Fangemeinschaft als Glaubensgemeinschaft – all das entspricht religiösen Mustern." },
+  { cat: "Ersatzreligion – Fußball", q: "Welchen Bezug gibt es zwischen Fußball als Ersatzreligion und Pascals 'gottförmiger Leere'?", correct: "Der Mensch füllt die Leere, die eigentlich nur Gott füllen kann, mit dem Fußball – aber das befriedigt nicht wirklich dauerhaft", wrong: ["Pascal hätte Fußball als legitimen Weg zu Gott anerkannt", "Fußball beweist, dass Menschen keine Gottesvorstellung brauchen", "Pascal sah Unterhaltung grundsätzlich als gut für den Glauben an"], explanation: "Pascal beschreibt, wie Menschen ihre innere Leere mit 'Zerstreuung' (divertissement) zu füllen versuchen. Fußball ist das moderne Paradebeispiel: intensive Gefühle, Gemeinschaft – aber die 'gottförmige Leere' bleibt." },
+  { cat: "Ersatzreligion – Fußball", q: "Welchen Zusammenhang hat Fußball als Ersatzreligion mit Nietzsche?", correct: "Nach dem 'Tod Gottes' entstehen Ersatzgötter – Fußballidole füllen die Leerstelle, die Gott hinterlassen hat", wrong: ["Nietzsche befürwortete Sport als Ausdruck des Übermenschen", "Nietzsche sah im Fußball eine Form der Sklavenmoral der Massen", "Nietzsche glaubte, Fußball werde Religion vollständig ersetzen"], explanation: "Nietzsche diagnostiziert, dass der Mensch nach dem kulturellen Tod Gottes neue Idole und Sinnquellen sucht. Fußballstars werden zu Göttern stilisiert – Messi wird als 'El Dios' bezeichnet. Das ist Nietzsche Prognose in der Gegenwart." }
+];
+
+let currentMode = 'mc';
+let questions = [];
+let currentIndex = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+
+function selectMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('mode-' + mode).classList.add('selected');
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  questions = shuffle(ALL_QUESTIONS);
+  currentIndex = 0; correct = 0; wrong = 0; answered = false;
+  document.getElementById('quiz-start').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-active').style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[currentIndex];
+  const total = questions.length;
+  document.getElementById('q-counter').textContent = `Frage ${currentIndex + 1} / ${total}`;
+  document.getElementById('q-score').textContent = `✓ ${correct}   ✗ ${wrong}`;
+  document.getElementById('q-progress').style.width = ((currentIndex / total) * 100) + '%';
+  document.getElementById('q-category').textContent = q.cat;
+  document.getElementById('q-question').textContent = q.q;
+  document.getElementById('q-feedback').className = 'quiz-feedback';
+  document.getElementById('q-next').style.display = 'none';
+
+  const opts = shuffle([q.correct, ...q.wrong]);
+  const container = document.getElementById('q-options');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answer(opt === q.correct, btn, q);
+    container.appendChild(btn);
+  });
+}
+
+function answer(isCorrect, btn, q) {
+  if (answered) return;
+  answered = true;
+  const allBtns = document.querySelectorAll('.quiz-opt');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === q.correct) b.classList.add('reveal');
+  });
+  if (isCorrect) {
+    btn.classList.remove('reveal');
+    btn.classList.add('correct');
+    correct++;
+  } else {
+    btn.classList.add('wrong');
+    wrong++;
+  }
+  document.getElementById('q-score').textContent = `✓ ${correct}   ✗ ${wrong}`;
+  const fb = document.getElementById('q-feedback');
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  fb.textContent = (isCorrect ? '✓ Richtig! ' : '✗ Falsch. ') + q.explanation;
+  document.getElementById('q-next').style.display = 'inline-block';
+  document.getElementById('q-next').textContent = currentIndex + 1 < questions.length ? 'Nächste Frage →' : 'Ergebnis anzeigen →';
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-active').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'block';
+  const total = questions.length;
+  const pct = Math.round((correct / total) * 100);
+  document.getElementById('res-score').textContent = pct + '%';
+  document.getElementById('res-label').textContent = `${correct} von ${total} richtig`;
+  document.getElementById('res-correct').textContent = correct;
+  document.getElementById('res-wrong').textContent = wrong;
+  document.getElementById('res-total').textContent = total;
+  let msg = '';
+  if (pct >= 90) msg = 'Ausgezeichnet! Du kennst den Stoff wirklich sehr gut. Die Klausur dürfte gut laufen.';
+  else if (pct >= 75) msg = 'Gut! Du hast die meisten Themen drauf. Schau dir die falsch beantworteten Fragen nochmal an.';
+  else if (pct >= 55) msg = 'Solide Grundlage, aber noch Luft nach oben. Fokus auf die Religionskritiker und den Vergleich Alt/Neu.';
+  else msg = 'Noch etwas Übung nötig. Lies den Lernstoff durch und versuche es dann nochmal!';
+  document.getElementById('res-message').textContent = msg;
+}
+
+function showSection(id, btnEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btnEl) btnEl.classList.add('active');
+  if (id === 'quiz-section') {
+    document.getElementById('quiz-start').style.display = 'block';
+    document.getElementById('quiz-active').style.display = 'none';
+    document.getElementById('quiz-result').style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>
